@@ -1,3 +1,6 @@
+let computerScore = 0;
+let humanScore = 0;
+
 function getComputerChoice(){
     let getComputerChoice = Math.random()*3;
     if (getComputerChoice < 1){
@@ -11,52 +14,48 @@ function getComputerChoice(){
     }
 }
 
-function getHumanChoice(){
-    let choice = prompt("Type your choice: rock, paper, or scissors!").toLowerCase();
-    if (choice !== "rock" && choice !== "paper" && choice !== "scissors"){
-        alert("Invalid choice. Please type either rock, paper, or scissors.");
-        return getHumanChoice();
-    }
-    return choice;
-}
-
-let computerScore = 0;
-let humanScore = 0;
-
 function playRound(humanChoice, computerChoice) {
+    let resultMessage;
+    if (typeof humanChoice !== 'string'){
+        console.error('Error: humanChoice is not a string:', humanChoice);
+        return;
+    }
+
+    console.log(`Human choice: ${humanChoice}`);
+    console.log(`Computer choice: ${computerChoice}`);
+    
     if (humanChoice === computerChoice){
-        console.log("It's a tie!");
+        const tieDiv = document.querySelector('#tie');
+        tieDiv.textContent = ("It's a tie!");
     } else if (
         (humanChoice === "rock" && computerChoice === "scissors") ||
         (humanChoice === "paper" && computerChoice === "rock") ||
-        (humanChoice === "scissors" && computerChoice === "paper")
+        (humanChoice === "scissor" && computerChoice === "paper")
     ){
         humanScore++;
-        console.log(`You win! ${humanChoice.charAt(0).toUpperCase() + humanChoice.slice(1)} beats ${computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)}.`);
+        const winDiv = document.querySelector('#win');
+        winDiv.textContent = `You win! ${humanChoice.charAt(0).toUpperCase() + humanChoice.slice(1)} beats ${computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)}.`;
     } else {
         computerScore++;
-        console.log(`You lose! ${computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)} beats ${humanChoice.charAt(0).toUpperCase() + humanChoice.slice(1)}.`);
+        const loseDiv = document.querySelector("#lose");
+        loseDiv.textContent = `You lose! ${computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)} beats ${humanChoice.charAt(0).toUpperCase() + humanChoice.slice(1)}.`;
     }
-    console.log(`Current scores - You: ${humanScore}, Computer: ${computerScore}`);
+    const resultsDiv = document.querySelector('#results');
+    resultsDiv.textContent = `Current scores - You: ${humanScore}, Computer: ${computerScore}`
 }
 
-function playGame(){
-    let humanChoice1 = getHumanChoice();
-    let computerChoice1 = getComputerChoice();
-    playRound(humanChoice1, computerChoice1);
+const rockButton = document.getElementById('rock');
+const scissorButton = document.getElementById('scissors');
+const paperButton = document.getElementById('paper');
 
-    let humanChoice2 = getHumanChoice();
-    let computerChoice2 = getComputerChoice();
-    playRound(humanChoice2, computerChoice2);
+rockButton.addEventListener('click', function(){
+    playRound('rock',getComputerChoice());
+});
 
-    let humanChoice3 = getHumanChoice();
-    let computerChoice3 = getComputerChoice();
-    playRound(humanChoice3, computerChoice3);
+scissorButton.addEventListener('click', function(){
+    playRound('scissors',getComputerChoice());
+});
 
-    let humanChoice4 = getHumanChoice();
-    let computerChoice4 = getComputerChoice();
-    playRound(humanChoice4, computerChoice4);
-
-}
-
-playGame();
+paperButton.addEventListener('click', function(){
+    playRound('paper',getComputerChoice());
+});
